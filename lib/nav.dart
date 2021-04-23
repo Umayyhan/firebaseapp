@@ -28,9 +28,7 @@ class _NavState extends State<Nav> {
       appBar: AppBar(
         title: Text('TLC Trip Data'),
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
+      body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

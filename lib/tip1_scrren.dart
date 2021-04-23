@@ -1,50 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:intl/intl.dart';
+import 'Trip.dart';
 
-class Tip_1 extends StatelessWidget {
-  testFunc(){
-    var _list;
-//    Query _testRef = FirebaseDatabase.instance.reference().orderByChild("trip_distance").limitToFirst(50);
-//    DatabaseReference _testRef = FirebaseDatabase.instance.reference();
+class Tip_1 extends StatefulWidget {
+  @override
+  _Tip_1State createState() => _Tip_1State();
+
+  // Setting to true will force the tab to never be disposed. This could be dangerous.
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class _Tip_1State extends State<Tip_1> {
+  List<Trip> tripItems = [];
+
+  calculateTipOneTrip() {
+    tripItems = [];
     final databaseReference = FirebaseDatabase.instance.reference();
-    databaseReference
-        .orderByChild('trip_distance')
-        .once()
-        .then((snapshot) {
-      var firstPageItems = snapshot.value;
-
-      if (firstPageItems != null) {
-        List<dynamic> curretList = [];
-        firstPageItems.forEach((orderId, orderData) {
-
-          print ("date_slug " + orderData['date_slug'] + "\r\n\r\n\r\n");
-          curretList.add(orderData);
-        });
-
-        _list.addAll(curretList);
-      }
+    databaseReference.once().then((snapshot) {
+      List tempItems = snapshot.value;
+      tempItems.forEach((value) {
+        tripItems.add(Trip.fromJson(value));
+      });
+      tripItems.sort((a, b) => b.trip_distance.compareTo(a.trip_distance));
+      setState(() {});
     });
-//    _testRef.once().then((DataSnapshot snapshot){
-//      Map<dynamic, dynamic> values = snapshot.value;
-//      values.forEach((key,values) {
-//        print(values["name"]);
-//      });
-//    });
-//    databaseReference.child('0').once().then((value) => print(value));
-    print("hi");
   }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text('data_2'),
-          RaisedButton(onPressed: () {
-            testFunc();
-          }),
-        ],
+    return Column(
+      children: [
+        Center(
+          child: ElevatedButton(
+              onPressed: () => calculateTipOneTrip(),
+              child: Text("Tıklaaaa"),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.amber,
+              )),
+        ),
+        tripItems.length > 1
+            ? SizedBox(
+                height: 450,
+                child: ListView.builder(
+                  itemBuilder: (context, index) => tripElement(context, index),
+                  itemCount: 20,
+                ),
+              )
+            : SizedBox()
+      ],
+    );
+  }
+
+  Widget tripElement(BuildContext context, index) {
+    Trip currentItem = tripItems[index];
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Card(
+        elevation: 6,
+        child: ListTile(
+          leading: Icon(
+            Icons.local_taxi,
+            color: Colors.teal,
+            size: 40,
+          ),
+          title: Text(
+            currentItem.trip_distance.toString(),
+            style: TextStyle(fontSize: 18),
+          ),
+          subtitle:
+              Text(DateFormat.yMMMd().format(currentItem.tpep_pickup_datetime)),
+
+        ),
       ),
     );
   }
