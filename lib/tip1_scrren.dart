@@ -35,7 +35,7 @@ class _Tip_1State extends State<Tip_1> {
         Center(
           child: ElevatedButton(
               onPressed: () => calculateTipOneTrip(),
-              child: Text("Tıklaaaa"),
+              child: Text("Tıkla"),
               style: ElevatedButton.styleFrom(
                 primary: Colors.amber,
               )),
@@ -55,6 +55,7 @@ class _Tip_1State extends State<Tip_1> {
 
   Widget tripElement(BuildContext context, index) {
     Trip currentItem = tripItems[index];
+    print(currentItem.trip_distance);
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Card(
@@ -71,7 +72,6 @@ class _Tip_1State extends State<Tip_1> {
           ),
           subtitle:
               Text(DateFormat.yMMMd().format(currentItem.tpep_pickup_datetime)),
-
         ),
       ),
     );

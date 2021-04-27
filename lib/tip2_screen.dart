@@ -24,8 +24,9 @@ class _Tip_2State extends State<Tip_2> {
       List tempItems = snapshot.value;
       tempItems.forEach((value) {
         Trip tripItem = Trip.fromJson(value);
-        if (tripItem.tpep_pickup_datetime.isAfter(endDate) && tripItem.tpep_pickup_datetime.isBefore(startDate)){
-            tripItems.add(tripItem);
+        if (tripItem.tpep_pickup_datetime.isAfter(endDate) &&
+            tripItem.tpep_pickup_datetime.isBefore(startDate)) {
+          tripItems.add(tripItem);
         }
       });
       tripItems.sort((a, b) => a.trip_distance.compareTo(b.trip_distance));
@@ -42,35 +43,43 @@ class _Tip_2State extends State<Tip_2> {
           padding: EdgeInsets.only(top: 20),
           child: Center(
               child: GestureDetector(
-                child: Text("Start: "+ DateFormat('yyyy-MM-dd').format(startDate), style: TextStyle(fontSize: 20),),
-                onTap: () => _startDateSelector(context),)
-          ),
+            child: Text(
+              "Start: " + DateFormat('yyyy-MM-dd').format(startDate),
+              style: TextStyle(fontSize: 20),
+            ),
+            onTap: () => _startDateSelector(context),
+          )),
         ),
         Container(
           padding: EdgeInsets.only(top: 20),
           child: Center(
             child: GestureDetector(
-              child: Text("End: "+ DateFormat('yyyy-MM-dd').format(endDate), style: TextStyle(fontSize: 20),),
-              onTap: () => _endDateSelector(context),),
+              child: Text(
+                "End: " + DateFormat('yyyy-MM-dd').format(endDate),
+                style: TextStyle(fontSize: 20),
+              ),
+              onTap: () => _endDateSelector(context),
+            ),
           ),
         ),
-
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
         ElevatedButton(
           onPressed: () => calculateTipTwoTrip(),
-          child: Text("Tıklaaaa"),
+          child: Text("Tıkla"),
           style: ElevatedButton.styleFrom(
             primary: Colors.amber,
           ),
         ),
         tripItems.length > 1
             ? SizedBox(
-          height: 350,
-          child: ListView.builder(
-            itemBuilder: (context, index) => tripElement(context, index),
-            itemCount: 5,
-          ),
-        )
+                height: 350,
+                child: ListView.builder(
+                  itemBuilder: (context, index) => tripElement(context, index),
+                  itemCount: 5,
+                ),
+              )
             : SizedBox()
       ],
     );
@@ -94,7 +103,7 @@ class _Tip_2State extends State<Tip_2> {
             style: TextStyle(fontSize: 18),
           ),
           subtitle:
-          Text(DateFormat.yMMMd().format(currentItem.tpep_pickup_datetime)),
+              Text(DateFormat.yMMMd().format(currentItem.tpep_pickup_datetime)),
           trailing: Icon(
             Icons.arrow_forward_ios,
             color: Colors.teal,
